@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ Chatbot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .chat-bubble { max-width: 75%; }
+        .user-bubble { background-color: #3b82f6; color: white; border-bottom-right-radius: 0; }
+        .bot-bubble { background-color: #e5e7eb; color: #1f2937; border-bottom-left-radius: 0; }
+        #chat-window { scroll-behavior: smooth; }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="w-full max-w-lg flex flex-col h-[90vh] bg-white rounded-xl shadow-lg">
+        <header class="bg-gray-800 text-white p-4 text-center rounded-t-xl">
+            <h1 class="text-xl font-bold">Customer Support Chatbot</h1>
+        </header>
+
+        <main id="chat-window" class="flex-1 p-6 overflow-y-auto">
+            <div class="flex justify-start mb-4">
+                <div class="chat-bubble bot-bubble p-3 rounded-lg">
+                    <p>Hello! How can I help you today? You can ask me about our hours, shipping, or return policy.</p>
+                </div>
+            </div>
+        </main>
+
+        <footer class="p-4 border-t">
+            <form id="chat-form" class="flex items-center">
+                <input type="text" id="message-input" placeholder="Type your question..." autocomplete="off"
+                    class="flex-1 p-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button type="submit" class="bg-blue-600 text-white p-2 rounded-r-md hover:bg-blue-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </button>
+            </form>
+        </footer>
+    </div>
+
+<script>
+    const chatForm = document.getElementById('chat-form');
+    const messageInput = document.getElementById('message-input');
+    const chatWindow = document.getElementById('chat-window');
+
+    chatForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const userMessage = messageInput.value.trim();
+        if (!userMessage) return;
+
+        // Display user's message
+        appendMessage(userMessage, 'user');
+        messageInput.value = '';
+
+        // Show typing indicator
+        appendMessage('...', 'bot', true);
+
+        try {
+            const response = await fetch('/ask', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ question: userMessage })
+            });
+            const data = await response.json();
+            
+            // Remove typing indicator and show bot's answer
+            updateLastBotMessage(data.answer);
+
+        } catch (error) {
+            updateLastBotMessage('Sorry, something went wrong. Please try again.');
+            console.error('Error:', error);
+        }
+    });
+
+    function appendMessage(message, sender, isTyping = false) {
+        const messageWrapper = document.createElement('div');
+        messageWrapper.classList.add('flex', 'mb-4');
+        
+        const bubble = document.createElement('div');
+        bubble.classList.add('chat-bubble', 'p-3', 'rounded-lg');
+
+        if (sender === 'user') {
+            messageWrapper.classList.add('justify-end');
+            bubble.classList.add('user-bubble');
+        } else {
+            messageWrapper.classList.add('justify-start');
+            bubble.classList.add('bot-bubble');
+            if (isTyping) {
+                bubble.id = 'typing-indicator';
+                bubble.innerHTML = `<div class="flex items-center space-x-1"><div class="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></div><div class="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style="animation-delay: 0.2s;"></div><div class="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style="animation-delay: 0.4s;"></div></div>`;
+            }
+        }
+        
+        if (!isTyping) {
+            bubble.textContent = message;
+        }
+
+        messageWrapper.appendChild(bubble);
+        chatWindow.appendChild(messageWrapper);
+        chatWindow.scrollTop = chatWindow.scrollHeight; // Auto-scroll
+    }
+
+    function updateLastBotMessage(message) {
+        const typingIndicator = document.getElementById('typing-indicator');
+        if (typingIndicator) {
+            typingIndicator.innerHTML = ''; // Remove the dots
+            typingIndicator.textContent = message;
+            typingIndicator.id = ''; // Clear the ID
+        }
+    }
+</script>
+</body>
+</html>
