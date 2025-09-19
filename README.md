@@ -1,6 +1,6 @@
-# AI-Powered FAQ Chatbot - CodeAlpha Internship Project
+# AI Hybrid Chatbot - A Full-Stack Personal Project
 
-This is a full-stack web application that functions as a hybrid chatbot. It first attempts to answer user questions from a pre-defined set of FAQs using NLP techniques. If it cannot find a confident answer, it escalates the query to a powerful Large Language Model (Google's Gemini AI) to provide a general knowledge response.
+This is a full-stack web application that functions as a hybrid chatbot. It was built to demonstrate skills in combining classic NLP techniques with modern generative AI. The bot first attempts to answer user questions from a pre-defined set of FAQs. If it cannot find a confident answer, it escalates the query to a powerful Large Language Model (Google's Gemini AI) to provide a general knowledge response.
 
 ---
 
@@ -31,8 +31,8 @@ This is a full-stack web application that functions as a hybrid chatbot. It firs
 
 2.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/your-username/CodeAlpha_AI_Chatbot.git](https://github.com/your-username/CodeAlpha_AI_Chatbot.git)
-    cd CodeAlpha_AI_Chatbot
+    git clone [https://github.com/Vikrant-kun/AI-Hybrid-Chatbot.git](https://github.com/Vikrant-kun/AI-Hybrid-Chatbot.git)
+    cd AI-Hybrid-Chatbot
     ```
 
 3.  **Install dependencies:**
