@@ -7,14 +7,3 @@ pip install -r requirements.txt
 
 # Step 2: Run a small Python script to download the necessary NLTK data
 python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords')"
-```
-
-**Step 2: Commit and Push This Final Change**
-
-Save the clean `build.sh` file. Now, go to your terminal and run these commands to update your GitHub repository.
-
-```bash
-git add build.sh
-git commit -m "Clean up and fix build script"
-git push origin main
-
