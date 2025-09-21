@@ -10,15 +10,20 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-try:
-    genai.configure(api_key="AIzaSyDGjOKqAyVTVzEdj2lwPMNugj6r9JeGV94")
-    # THE FIX: Using the latest, more powerful model
-    model = genai.GenerativeModel('gemini-1.5-flash-latest')
-    logging.info("Gemini AI model configured successfully.")
-except Exception as e:
-    logging.error(f"FATAL: Error configuring Gemini AI: {e}")
-    model = None
+# NEW, SECURE CODE
+import os # Make sure to have 'import os' at the top of your file
 
+try:
+    # Gets the API key from the hosting environment's secrets
+    api_key = os.environ.get('AIzaSyDGjOKqAyVTVzEdj2lwPMNugj6r9JeGV94')
+    if not api_key:
+        raise ValueError("GOOGLE_API_KEY environment variable not set.")
+    genai.configure(api_key=api_key)
+    model = genai.GenerativeModel('gemini-1.5-flash-latest')
+    print("Gemini AI model configured successfully.")
+except Exception as e:
+    print(f"FATAL: Error configuring Gemini AI: {e}")
+    model = None
 faqs = {
     "What are your business hours?": "Our business hours are from 9 AM to 6 PM, Monday to Friday.",
     "How can I track my order?": "You can track your order by visiting the 'Track Order' page on our website and entering your order ID.",
