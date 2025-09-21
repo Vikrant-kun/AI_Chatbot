@@ -9,13 +9,12 @@ pip install -r requirements.txt
 python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords')"
 ```
 
----
-### **Step 2: Commit and Push This Final Change**
+**Step 2: Commit and Push This Final Change**
 
-Save the new `build.sh` file, then go to your terminal and run these commands to update your GitHub repository.
+Save the clean `build.sh` file. Now, go to your terminal and run these commands to update your GitHub repository.
 
 ```bash
 git add build.sh
-git commit -m "Update build script for NLTK data"
+git commit -m "Clean up and fix build script"
 git push origin main
 
