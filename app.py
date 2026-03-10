@@ -11,9 +11,6 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# ----------------------
-# NLTK setup (download at runtime)
-# ----------------------
 try:
     nltk.data.find("corpora/stopwords")
 except LookupError:
@@ -25,11 +22,8 @@ except LookupError:
 
 stop_words = set(stopwords.words("english"))
 
-# ----------------------
-# Gemini AI setup
-# ----------------------
 try:
-    api_key = os.environ.get("GOOGLE_API_KEY")  # <-- correct: environment variable name
+    api_key = os.environ.get("GOOGLE_API_KEY")
     if not api_key:
         raise ValueError("GOOGLE_API_KEY environment variable not set.")
     genai.configure(api_key=api_key)
@@ -39,9 +33,6 @@ except Exception as e:
     logging.error(f"FATAL: Error configuring Gemini AI: {e}")
     model = None
 
-# ----------------------
-# FAQ setup
-# ----------------------
 faqs = {
     "What are your business hours?": "Our business hours are from 9 AM to 6 PM, Monday to Friday.",
     "How can I track my order?": "You can track your order by visiting the 'Track Order' page on our website and entering your order ID.",
@@ -51,9 +42,6 @@ faqs = {
     "What payment methods do you accept?": "We accept all major credit cards, PayPal, and Apple Pay."
 }
 
-# ----------------------
-# Preprocessing & TF-IDF
-# ----------------------
 def preprocess(text):
     text = text.lower()
     text = re.sub(r"[^\w\s]", "", text)
@@ -65,9 +53,6 @@ processed_questions = [preprocess(q) for q in questions]
 vectorizer = TfidfVectorizer()
 question_vectors = vectorizer.fit_transform(processed_questions)
 
-# ----------------------
-# Answering functions
-# ----------------------
 def get_general_answer(user_question):
     if not model:
         return "I'm sorry, my connection to the AI model is not configured. I can only answer our standard FAQs."
@@ -97,9 +82,6 @@ def get_best_answer(user_question):
     
     return get_general_answer(user_question)
 
-# ----------------------
-# Flask App
-# ----------------------
 app = Flask(__name__)
 
 @app.route("/")
